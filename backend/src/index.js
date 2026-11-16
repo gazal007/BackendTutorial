@@ -1,5 +1,10 @@
+import dns from "node:dns";
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
+
+// Workaround: some machines (VPN/local resolver) refuse the SRV lookup that
+// mongodb+srv:// URIs need. Use public DNS for Node's own lookups.
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 import connectDB from "./config/database.js";
 import app from "./app.js";

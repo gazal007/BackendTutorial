@@ -30,10 +30,10 @@ const userSchema = new Schema(
 );
 
 // Hash the password before saving, only when it was modified
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+// (Mongoose 9: async hooks no longer receive `next`; just return/await)
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 10);
-  next();
 });
 
 // Compare a plain password with the stored hash
